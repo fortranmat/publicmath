@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5.7 Continuity of a Function at a Point</title>
+
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- MathJax for equation rendering -->
+<script>
+  window.MathJax = {
+    tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+    options: { skipHtmlTags: ['script','noscript','style','textarea'] }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+<!-- TikZJax for live TikZ diagram rendering -->
+<link rel="stylesheet" href="https://tikzjax.com/v1/fonts.css">
+<script src="https://tikzjax.com/v1/tikzjax.js"></script>
+
+<style>
+/* ── TOKENS ── */
+:root {
+  --ink:        #1a1a2e;
+  --paper:      #faf8f4;
+  --accent:     #c0392b;
+  --rule:       #d4c9b8;
+  --code-bg:    #1e1e2e;
+  --code-fg:    #cdd6f4;
+  --def-bg:     #f0f4ff;
+  --def-border: #3b5bdb;
+  --ex-bg:      #f8fff8;
+  --ex-border:  #2d9e44;
+  --exer-bg:    #fffbf0;
+  --exer-border:#e8a020;
+  --layout-bg:  #f8f6f2;
+  --shadow-sm:  0 1px 3px rgba(0,0,0,.08);
+  --shadow-md:  0 3px 10px rgba(0,0,0,.1);
+}
+
+/* ── RESET & BASE ── */
+* { box-sizing:border-box; margin:0; padding:0 }
+body {
+  font-family: "Crimson Pro", Georgia, serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.8;
+}
+.page {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+}
+
+/* ── META HEADER ── */
+.meta-header {
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 1.2rem;
+  margin-bottom: 2.5rem;
+}
+.source-tag {
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: .35rem;
+}
+.meta-header h1 {
+  font-size: 1.65rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  line-height: 1.3;
+}
+.meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .9rem;
+}
+.pill {
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 99px;
+  background: var(--ink);
+  color: var(--paper);
+}
+.pill.rag { background: #2d9e44 }
+.pill.multi { background: #7c3aed }
+
+/* ── HEADINGS ── */
+h2.section-head {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  border-left: 4px solid var(--accent);
+  padding-left: .75rem;
+  margin: 2.5rem 0 1rem;
+}
+h3.sub-head {
+  font-family: "DM Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #555;
+  margin: 2rem 0 .6rem;
+}
+
+/* ── PROSE ── */
+.prose { margin-bottom: 1.2rem }
+.prose p + p { margin-top: .75rem }
+
+/* ── DEFINITION ── */
+.block-definition {
+  background: var(--def-bg);
+  border-left: 4px solid var(--def-border);
+  border-radius: 0 6px 6px 0;
+  padding: 1.1rem 1.4rem;
+  margin: 1.6rem 0;
+  box-shadow: var(--shadow-sm);
+}
+.block-definition .block-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--def-border);
+  margin-bottom: .5rem;
+}
+.block-definition .term {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: .6rem;
+}
+.def-body p + p { margin-top: .6rem }
+
+/* ── EXAMPLE ── */
+.block-example {
+  background: var(--ex-bg);
+  border: 1px solid var(--ex-border);
+  border-radius: 6px;
+  padding: 1.1rem 1.4rem;
+  margin: 1.6rem 0;
+  box-shadow: var(--shadow-sm);
+}
+.block-example .block-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ex-border);
+  margin-bottom: .5rem;
+}
+.given-block {
+  background: rgba(45,158,68,.08);
+  border-radius: 4px;
+  padding: .65rem .9rem;
+  margin: .5rem 0;
+  font-size: .95rem;
+  line-height: 1.7;
+}
+.steps-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .9rem 0;
+  font-size: .9rem;
+}
+.steps-table th {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: .4rem .6rem;
+  background: rgba(45,158,68,.12);
+  border-bottom: 1px solid var(--ex-border);
+}
+.steps-table td {
+  padding: .5rem .65rem;
+  border-bottom: 1px solid rgba(45,158,68,.15);
+  vertical-align: top;
+}
+.steps-table tr:last-child td { border-bottom: none }
+.step-expr { font-weight: 600 }
+.step-result { color: var(--accent); font-weight: 600 }
+.step-note { font-size: .82rem; color: #666; font-style: italic }
+.conclusion {
+  margin-top: .9rem;
+  padding: .5rem .9rem;
+  background: rgba(45,158,68,.1);
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* ── EXERCISE ── */
+.block-exercise {
+  background: var(--exer-bg);
+  border: 1.5px dashed var(--exer-border);
+  border-radius: 6px;
+  padding: 1.1rem 1.4rem;
+  margin: 1.6rem 0;
+}
+.block-exercise .block-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--exer-border);
+  margin-bottom: .5rem;
+}
+.difficulty {
+  display: inline-block;
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: 99px;
+  background: var(--exer-border);
+  color: white;
+  margin-left: .4rem;
+  vertical-align: middle;
+}
+
+/* ── REMARK ── */
+.block-remark {
+  background: #fff8f8;
+  border-left: 3px solid var(--accent);
+  padding: .7rem 1rem;
+  margin: 1.2rem 0;
+  font-style: italic;
+  font-size: .95rem;
+  color: #444;
+}
+.block-remark strong { font-style: normal; color: var(--accent) }
+
+/* ── DIAGRAM ── */
+.block-diagram {
+  margin: 2rem 0;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.diagram-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .55rem 1rem;
+  background: #f0ede8;
+  border-bottom: 1px solid var(--rule);
+}
+.diagram-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+.diagram-badge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  padding: 1px 8px;
+  border-radius: 3px;
+  background: #2d2d3e;
+  color: #a9b1d6;
+}
+.diagram-alt {
+  padding: .7rem 1rem;
+  font-style: italic;
+  color: #777;
+  font-size: .88rem;
+  border-bottom: 1px solid var(--rule);
+  background: #faf9f7;
+}
+
+/* TikZJax render area */
+.tikz-render {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 1rem;
+  background: white;
+  border-bottom: 1px solid var(--rule);
+  min-height: 120px;
+}
+.tikz-render svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Collapsible source */
+details.tikz-source { border-top: 1px solid var(--rule) }
+details.tikz-source summary {
+  font-family: "DM Sans", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: .45rem 1rem;
+  color: #888;
+  background: #f5f3ef;
+  user-select: none;
+  list-style: none;
+}
+details.tikz-source summary::-webkit-details-marker { display: none }
+details.tikz-source summary::before {
+  content: "▶ ";
+  font-size: 9px;
+}
+details.tikz-source[open] summary::before { content: "▼ " }
+details.tikz-source[open] summary {
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Syntax-highlighted TikZ code */
+.tikz-block {
+  background: var(--code-bg);
+  padding: 1rem 1.2rem;
+  overflow-x: auto;
+}
+.tikz-block pre {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--code-fg);
+  white-space: pre;
+}
+.tikz-block .kw  { color: #89b4fa }   /* blue  — commands */
+.tikz-block .str { color: #a6e3a1 }   /* green — node text */
+.tikz-block .cm  { color: #585b70; font-style: italic } /* grey — comments */
+
+.tikz-empty {
+  padding: 1rem;
+  color: #888;
+  font-style: italic;
+  font-family: "DM Sans", sans-serif;
+  font-size: 13px;
+}
+.diagram-caption {
+  padding: .45rem 1rem;
+  font-family: "DM Sans", sans-serif;
+  font-size: 12px;
+  color: #777;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  background: #faf9f7;
+}
+
+/* ── TABLE ── */
+.block-table { margin: 1.5rem 0 }
+.block-table .block-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: .4rem;
+}
+.data-table { border-collapse: collapse; font-family: "DM Sans", sans-serif; font-size: .9rem }
+.data-table th, .data-table td {
+  border: 1px solid var(--rule);
+  padding: .4rem .95rem;
+  text-align: center;
+}
+.data-table th { background: #f0ede8; font-weight: 600 }
+.caption-text { font-size: .82rem; color: #999; margin-top: .35rem; font-style: italic }
+
+/* ── LAYOUT / SIDEBAR ── */
+.block-layout {
+  border: 2px solid var(--rule);
+  border-radius: 6px;
+  padding: 1rem 1.3rem;
+  margin: 1.6rem 0;
+  background: var(--layout-bg);
+}
+.block-layout .block-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: .6rem;
+}
+.layout-content { font-size: .95rem }
+
+/* ── LIST ── */
+.block-list { margin: 1.5rem 0 }
+.block-list .block-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: .5rem;
+}
+.content-list { padding-left: 1.5rem }
+.content-list li { margin-bottom: .35rem; font-size: .96rem }
+
+/* ── GENERIC ── */
+.block-generic {
+  border: 1px dashed var(--rule);
+  border-radius: 4px;
+  padding: .8rem 1rem;
+  margin: 1rem 0;
+  font-size: .93rem;
+}
+.block-generic .block-label {
+  font-family: "DM Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: #bbb;
+  margin-bottom: .4rem;
+}
+
+/* ── RELATIONSHIPS ── */
+.relationships {
+  margin-top: 3rem;
+  border-top: 1px solid var(--rule);
+  padding-top: 1.5rem;
+}
+.relationships h3 {
+  font-family: "DM Sans", sans-serif;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-bottom: .9rem;
+}
+.rel-grid { display: flex; flex-direction: column; gap: .3rem }
+.rel-row {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: #666;
+  flex-wrap: wrap;
+}
+.rel-from { color: #3b5bdb }
+.rel-to   { color: #2d9e44 }
+.rel-type {
+  background: #f0ede8;
+  padding: 0 7px;
+  border-radius: 3px;
+  color: var(--accent);
+  font-weight: 500;
+}
+.rel-arrow { color: #ccc }
+
+/* ── DIVIDER ── */
+hr.divider {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 2rem 0;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+
+<div class="meta-header">
+  <div class="source-tag">IGNOU Fundamentals of Mathematics-II Block 2 Unit 5 &middot; Pages 19-22</div>
+  <h1>5.7 Continuity of a Function at a Point</h1>
+  <div class="meta-pills"><span class="pill">calculus</span><span class="pill">limits</span><span class="pill">continuity</span><span class="pill">functions</span><span class="pill">graphs</span><span class="pill rag">Vector RAG Ready</span><span class="pill multi">Multimodal Ready</span></div>
+</div>
+<h2 class="section-head">5.7 CONTINUITY OF A FUNCTION AT A POINT</h2>
+<div class="prose"><p>In Sec. 5.6, we have discussed the concept of L.H.L. and R.H.L. Adding one more-step, we can define continuity at a point.</p></div>
+
+<div class="block-definition">
+  <div class="block-label">Definition</div>
+  <div class="term">Continuity at a Point</div>
+  <div class="def-body"><p>A function f(x) is said to be continuous at x = a if
+$$ \lim_{x \to a^-} f(x) = \lim_{x \to a^+} f(x) = f(a) $$
+i.e. for continuity at a point x = a, we must have
+i.e.
+L.H.L. at x=a = R.H.L. at x=a = value of the function at x = a</p><p>Diagrammatically, continuity at x = a means graph of the function f(x) from a value slightly less than ‘a’ to a value slightly greater than ‘a’ has no gap, i.e. if we draw the graph with pencil then we don’t have to pick up the pencil as we cross the point where x = a.</p></div>
+</div>
+
+<div class="block-diagram">
+  <div class="diagram-header">
+    <span class="diagram-label">Figure 5.3 Jump Discontinuity</span>
+    <span class="diagram-badge">tikz · function_plot</span>
+  </div>
+  <div class="diagram-alt">A graph of a function with a jump discontinuity at x=a. The graph breaks and jumps to a different height at that point.</div>
+  
+  <div class="tikz-render">
+    <script type="text/tikz">
+\begin{tikzpicture}[scale=1]
+  \draw[->] (-1,0) -- (4,0) node[right] {X};
+  \draw[->] (0,-0.5) -- (0,4) node[above] {Y};
+  \draw[thick, blue, domain=0:1.95] plot (\x, {\x+1});
+  \draw[thick, blue, domain=2:3.5] plot (\x, {0.5*\x+2});
+  \draw (2,3) circle (2.5pt); % open circle
+  \fill (2,3) circle (0pt);
+  \fill (2,3) node[above left] {};
+  \fill[blue] (2,3) circle (2.5pt);
+  \draw[dashed] (2,0) node[below] {$a$} -- (2,3);
+  \node at (2.5,1) {f(x) is not continuous at x=a};
+\end{tikzpicture}
+    </script>
+  </div>
+  
+  <details class="tikz-source">
+    <summary>&#128196; View TikZ source</summary>
+    <div class="tikz-block"><pre><span class="kw">\begin</span><span class="str">{tikzpicture}</span>[scale=1]
+  <span class="kw">\draw</span>[-&gt;] (-1,0) -- (4,0) node[right] <span class="str">{X}</span>;
+  <span class="kw">\draw</span>[-&gt;] (0,-0.5) -- (0,4) node[above] <span class="str">{Y}</span>;
+  <span class="kw">\draw</span>[thick, blue, domain=0:1.95] plot (\x, <span class="str">{\x+1}</span>);
+  <span class="kw">\draw</span>[thick, blue, domain=2:3.5] plot (\x, <span class="str">{0.5*\x+2}</span>);
+  <span class="kw">\draw</span> (2,3) circle (2.5pt); <span class="cm">% open circle</span>
+  <span class="kw">\fill</span> (2,3) circle (0pt);
+  <span class="kw">\fill</span> (2,3) node[above left] {};
+  <span class="kw">\fill</span>[blue] (2,3) circle (2.5pt);
+  <span class="kw">\draw</span>[dashed] (2,0) node[below] <span class="str">{$a$}</span> -- (2,3);
+  <span class="kw">\node</span> at (2.5,1) <span class="str">{f(x) is not continuous at x=a}</span>;
+<span class="kw">\end</span><span class="str">{tikzpicture}</span></pre></div>
+  </details>
+  <div class="diagram-caption">Figure 5.3 Jump Discontinuity</div>
+</div>
+
+<div class="block-diagram">
+  <div class="diagram-header">
+    <span class="diagram-label">Figure 5.4 Removable Discontinuity</span>
+    <span class="diagram-badge">tikz · function_plot</span>
+  </div>
+  <div class="diagram-alt">A graph of a function with a hole (removable discontinuity) at x=a. The curve is complete except for one missing point.</div>
+  
+  <div class="tikz-render">
+    <script type="text/tikz">
+\begin{tikzpicture}[scale=1]
+  \draw[->] (-1,0) -- (4,0) node[right] {X};
+  \draw[->] (0,-0.5) -- (0,4) node[above] {Y};
+  \draw[thick, blue, domain=-0.5:3.5] plot (\x, {0.5*(\x-1.5)^2+1});
+  \fill[white] (1.5,1) circle (2.5pt);
+  \draw (1.5,1) circle (2.5pt); % open circle
+  \draw[dashed] (1.5,0) node[below] {$a$} -- (1.5,1);
+  \node at (2.5,3) {f(x) is not continuous at x=a};
+\end{tikzpicture}
+    </script>
+  </div>
+  
+  <details class="tikz-source">
+    <summary>&#128196; View TikZ source</summary>
+    <div class="tikz-block"><pre><span class="kw">\begin</span><span class="str">{tikzpicture}</span>[scale=1]
+  <span class="kw">\draw</span>[-&gt;] (-1,0) -- (4,0) node[right] <span class="str">{X}</span>;
+  <span class="kw">\draw</span>[-&gt;] (0,-0.5) -- (0,4) node[above] <span class="str">{Y}</span>;
+  <span class="kw">\draw</span>[thick, blue, domain=-0.5:3.5] plot (\x, <span class="str">{0.5*(\x-1.5)^2+1}</span>);
+  <span class="kw">\fill</span>[white] (1.5,1) circle (2.5pt);
+  <span class="kw">\draw</span> (1.5,1) circle (2.5pt); <span class="cm">% open circle</span>
+  <span class="kw">\draw</span>[dashed] (1.5,0) node[below] <span class="str">{$a$}</span> -- (1.5,1);
+  <span class="kw">\node</span> at (2.5,3) <span class="str">{f(x) is not continuous at x=a}</span>;
+<span class="kw">\end</span><span class="str">{tikzpicture}</span></pre></div>
+  </details>
+  <div class="diagram-caption">Figure 5.4 Removable Discontinuity</div>
+</div>
+
+<div class="block-diagram">
+  <div class="diagram-header">
+    <span class="diagram-label">Figure 5.5 Continuous Function</span>
+    <span class="diagram-badge">tikz · function_plot</span>
+  </div>
+  <div class="diagram-alt">A graph of a function that is continuous at x=a. The curve is smooth and has no breaks.</div>
+  
+  <div class="tikz-render">
+    <script type="text/tikz">
+\begin{tikzpicture}[scale=1]
+  \draw[->] (-1,0) -- (4,0) node[right] {X};
+  \draw[->] (0,-0.5) -- (0,4) node[above] {Y};
+  \draw[thick, blue, domain=-0.5:3.5] plot (\x, {0.2*\x^2+0.5*\x+1});
+  \fill[blue] (2, 2.8) circle (2.5pt);
+  \draw[dashed] (2,0) node[below] {$a$} -- (2,2.8);
+  \node at (2.5,1) {f(x) is continuous at x=a};
+\end{tikzpicture}
+    </script>
+  </div>
+  
+  <details class="tikz-source">
+    <summary>&#128196; View TikZ source</summary>
+    <div class="tikz-block"><pre><span class="kw">\begin</span><span class="str">{tikzpicture}</span>[scale=1]
+  <span class="kw">\draw</span>[-&gt;] (-1,0) -- (4,0) node[right] <span class="str">{X}</span>;
+  <span class="kw">\draw</span>[-&gt;] (0,-0.5) -- (0,4) node[above] <span class="str">{Y}</span>;
+  <span class="kw">\draw</span>[thick, blue, domain=-0.5:3.5] plot (\x, <span class="str">{0.2*\x^2+0.5*\x+1}</span>);
+  <span class="kw">\fill</span>[blue] (2, 2.8) circle (2.5pt);
+  <span class="kw">\draw</span>[dashed] (2,0) node[below] <span class="str">{$a$}</span> -- (2,2.8);
+  <span class="kw">\node</span> at (2.5,1) <span class="str">{f(x) is continuous at x=a}</span>;
+<span class="kw">\end</span><span class="str">{tikzpicture}</span></pre></div>
+  </details>
+  <div class="diagram-caption">Figure 5.5 Continuous Function</div>
+</div>
+<div class="prose"><p>Functions whose graphs are given in Fig. 5.6 and Fig. 5.7 are discussed below.</p></div>
+<div class="prose"><p>Consider the function f: R → R defined by
+f(x) = 2x + 3</p><p>See the graph of this function in Fig. 5.6. We note that this function is continuous at all points of its domain as there is no gap at any point in its graph.</p></div>
+
+<div class="block-table">
+  <div class="block-label">Table for y=2x+3</div>
+  <table>
+  <tr><th>x</th><td>0</td><td>1</td><td>2</td></tr>
+  <tr><th>y</th><td>3</td><td>5</td><td>7</td></tr>
+</table>
+  <div class="caption-text">Values for f(x) = 2x + 3</div>
+</div>
+
+<div class="block-diagram">
+  <div class="diagram-header">
+    <span class="diagram-label">Figure 5.6 Graph of y=2x+3</span>
+    <span class="diagram-badge">tikz · function_plot</span>
+  </div>
+  <div class="diagram-alt">A graph showing the straight line for the function y=2x+3.</div>
+  
+  <div class="tikz-render">
+    <script type="text/tikz">
+\begin{tikzpicture}[scale=0.7]
+  \draw[->] (-1,0) -- (3,0) node[right] {X};
+  \draw[->] (0,-1) -- (0,8) node[above] {Y};
+  \draw[ultra thick, blue, domain=-0.5:2.5] plot (\x, {2*\x+3});
+  \fill (0,3) circle (3pt) node[right] {(0,3)};
+  \fill (1,5) circle (3pt) node[right] {(1,5)};
+  \fill (2,7) circle (3pt) node[right] {(2,7)};
+  \node[above, sloped] at (2,7) {$y=2x+3$};
+\end{tikzpicture}
+    </script>
+  </div>
+  
+  <details class="tikz-source">
+    <summary>&#128196; View TikZ source</summary>
+    <div class="tikz-block"><pre><span class="kw">\begin</span><span class="str">{tikzpicture}</span>[scale=0.7]
+  <span class="kw">\draw</span>[-&gt;] (-1,0) -- (3,0) node[right] <span class="str">{X}</span>;
+  <span class="kw">\draw</span>[-&gt;] (0,-1) -- (0,8) node[above] <span class="str">{Y}</span>;
+  <span class="kw">\draw</span>[ultra thick, blue, domain=-0.5:2.5] plot (\x, <span class="str">{2*\x+3}</span>);
+  <span class="kw">\fill</span> (0,3) circle (3pt) node[right] <span class="str">{(0,3)}</span>;
+  <span class="kw">\fill</span> (1,5) circle (3pt) node[right] <span class="str">{(1,5)}</span>;
+  <span class="kw">\fill</span> (2,7) circle (3pt) node[right] <span class="str">{(2,7)}</span>;
+  <span class="kw">\node</span>[above, sloped] at (2,7) <span class="str">{$y=2x+3$}</span>;
+<span class="kw">\end</span><span class="str">{tikzpicture}</span></pre></div>
+  </details>
+  <div class="diagram-caption">Figure 5.6 Graph of y=2x+3</div>
+</div>
+<div class="prose"><p>Consider the function f: R → R defined by
+$$ f(x) = \begin{cases} 1, & x \ge 1 \\ 2, & x < 1 \end{cases} $$
+See the graph of this function in Fig. 5.7.
+We note that, if we draw the graph of this function with pencil, then we will have to pick up the pencil as we cross the point where x = 1. Therefore this function is not continuous at x = 1. Also this function is continuous at all points of its domain except at x = 1.</p></div>
+
+<div class="block-diagram">
+  <div class="diagram-header">
+    <span class="diagram-label">Figure 5.7 Graph of a Piecewise Function</span>
+    <span class="diagram-badge">tikz · function_plot</span>
+  </div>
+  <div class="diagram-alt">A graph of a piecewise function that jumps from y=2 to y=1 at x=1.</div>
+  
+  <div class="tikz-render">
+    <script type="text/tikz">
+\begin{tikzpicture}[scale=1]
+  \draw[->] (-2,0) -- (4,0) node[right] {X};
+  \draw[->] (0,-1) -- (0,3) node[above] {Y};
+  \draw[ultra thick, blue] (-1,2) -- (1,2);
+  \draw[ultra thick, blue] (1,1) -- (3,1);
+  \fill[white] (1,2) circle (2.5pt);
+  \draw (1,2) circle (2.5pt);
+  \fill[blue] (1,1) circle (2.5pt);
+  \draw[dashed] (1,0) node[below] {1} -- (1,2);
+\end{tikzpicture}
+    </script>
+  </div>
+  
+  <details class="tikz-source">
+    <summary>&#128196; View TikZ source</summary>
+    <div class="tikz-block"><pre><span class="kw">\begin</span><span class="str">{tikzpicture}</span>[scale=1]
+  <span class="kw">\draw</span>[-&gt;] (-2,0) -- (4,0) node[right] <span class="str">{X}</span>;
+  <span class="kw">\draw</span>[-&gt;] (0,-1) -- (0,3) node[above] <span class="str">{Y}</span>;
+  <span class="kw">\draw</span>[ultra thick, blue] (-1,2) -- (1,2);
+  <span class="kw">\draw</span>[ultra thick, blue] (1,1) -- (3,1);
+  <span class="kw">\fill</span>[white] (1,2) circle (2.5pt);
+  <span class="kw">\draw</span> (1,2) circle (2.5pt);
+  <span class="kw">\fill</span>[blue] (1,1) circle (2.5pt);
+  <span class="kw">\draw</span>[dashed] (1,0) node[below] <span class="str">{1}</span> -- (1,2);
+<span class="kw">\end</span><span class="str">{tikzpicture}</span></pre></div>
+  </details>
+  <div class="diagram-caption">Figure 5.7 Graph of a Piecewise Function</div>
+</div>
+
+<div class="block-example">
+  <div class="block-label">Example 9 Discussing Continuity at a Point</div>
+  <div class="given-block"><strong>Given:</strong><br>Discuss the continuity of the following functions at the given point:
+(i) f(x) = |x| at x = 0
+(ii) f(x) = |x - 3| at x = 3
+(iii) f(x) = 
+$$ \begin{cases} x^2+1, & x \le 1 \\ 1-x^2, & x > 1 \end{cases} $$
+at x = 1
+(iv) f(x) = 
+$$ \begin{cases} \frac{x-4}{x-4}, & x \ne 4 \\ 0, & x=4 \end{cases} $$
+at x = 4
+(v) f(x) = x/|x| at x = 0</div>
+  
+    <table class="steps-table">
+      <thead><tr><th>Step</th><th>Working</th><th>Result</th><th>Note</th></tr></thead>
+      <tbody><tr>
+          <td class="step-expr">(i) f(x) = |x| at x = 0</td>
+          <td>L.H.L. = 0, R.H.L. = 0. Also, f(0) = |0| = 0.</td>
+          <td class="step-result">Since L.H.L. = R.H.L. = f(0), f(x) is continuous at x = 0.</td>
+          <td class="step-note">Limits cited from Example 7 of the source unit.</td>
+        </tr><tr>
+          <td class="step-expr">(ii) f(x) = |x - 3| at x = 3</td>
+          <td>L.H.L. = 0, R.H.L. = 0. Also, f(3) = |3 - 3| = 0.</td>
+          <td class="step-result">Since L.H.L. = R.H.L. = f(3), f(x) is continuous at x = 3.</td>
+          <td class="step-note">Limits cited from Example 7 of the source unit.</td>
+        </tr><tr>
+          <td class="step-expr">(iii) Piecewise function at x = 1</td>
+          <td>L.H.L. = 2, but R.H.L. = 0.</td>
+          <td class="step-result">As L.H.L. ≠ R.H.L., f is not continuous at x = 1.</td>
+          <td class="step-note">Limits cited from Example 7 of the source unit.</td>
+        </tr><tr>
+          <td class="step-expr">(iv) Piecewise function at x = 4</td>
+          <td>The source states L.H.L. = 1 but R.H.L. = 1. It then concludes L.H.L. ≠ R.H.L.</td>
+          <td class="step-result">Therefore, f(x) is not continuous at x = 4.</td>
+          <td class="step-note">There is a logical contradiction in the source's reasoning (1=1, but it states they are not equal). The correct reasoning is that LHL=RHL=1, but f(4)=0. Since the limit (1) does not equal the function value (0), it is not continuous.</td>
+        </tr><tr>
+          <td class="step-expr">(v) f(x) = x/|x| at x = 0</td>
+          <td>L.H.L. = lim_{x->0^-} x/(-x) = -1. R.H.L. = lim_{x->0^+} x/x = 1.</td>
+          <td class="step-result">Since L.H.L. ≠ R.H.L., the limit does not exist. Hence f is not continuous at x = 0.</td>
+          <td></td>
+        </tr></tbody>
+    </table>
+  
+</div>
+
+<div class="block-example">
+  <div class="block-label">Example 10 Finding Constants for Continuity</div>
+  <div class="given-block"><strong>Given:</strong><br>The function f is continuous at x = 2:
+$$ f(x) = \begin{cases} 7, & x < 2 \\ a+5, & x = 2 \\ ax+b, & x > 2 \end{cases} $$</div><div class="given-block"><strong>Find:</strong> The values of a and b.</div>
+  
+    <table class="steps-table">
+      <thead><tr><th>Step</th><th>Working</th><th>Result</th><th>Note</th></tr></thead>
+      <tbody><tr>
+          <td class="step-expr">Calculate L.H.L. at x=2</td>
+          <td>L.H.L. = lim_{x->2^-} f(x) = lim_{x->2^-} 7</td>
+          <td class="step-result">7</td>
+          <td></td>
+        </tr><tr>
+          <td class="step-expr">Calculate R.H.L. at x=2</td>
+          <td>R.H.L. = lim_{x->2^+} f(x) = lim_{x->2^+} (ax+b)</td>
+          <td class="step-result">2a + b</td>
+          <td></td>
+        </tr><tr>
+          <td class="step-expr">Find the function value at x=2</td>
+          <td>f(2)</td>
+          <td class="step-result">a + 5</td>
+          <td></td>
+        </tr><tr>
+          <td class="step-expr">Apply continuity condition</td>
+          <td>For f to be continuous at x=2, we must have L.H.L. = R.H.L. = f(2).</td>
+          <td class="step-result">7 = 2a + b = a + 5</td>
+          <td></td>
+        </tr><tr>
+          <td class="step-expr">Solve for a</td>
+          <td>From 7 = a + 5</td>
+          <td class="step-result">a = 2</td>
+          <td></td>
+        </tr><tr>
+          <td class="step-expr">Solve for b</td>
+          <td>From 7 = 2a + b, substitute a=2. 7 = 2(2) + b = 4 + b.</td>
+          <td class="step-result">b = 3</td>
+          <td></td>
+        </tr><tr>
+          <td class="step-expr">Final Answer</td>
+          <td></td>
+          <td class="step-result">a = 2, b = 3</td>
+          <td></td>
+        </tr></tbody>
+    </table>
+  
+</div>
+
+<div class="block-exercise">
+  <div class="block-label">Exercise E9 <span class="difficulty">medium</span></div>
+  <div class="prose">Find the relation between a and b if the function f is given to be continuous at x = 0, where
+$$ f(x) = \begin{cases} 2x-a, & x \ge 0 \\ ax+b+3, & x < 0 \end{cases} $$</div>
+</div>
+
+<div class="relationships">
+  <h3>Block Relationships</h3>
+  <div class="rel-grid">
+    <div class="rel-row">
+      <span class="rel-from">sec-intro</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">supplements</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">continuity-definition</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">continuity-definition</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">illustrated_by</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">fig-5-3</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">continuity-definition</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">illustrated_by</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">fig-5-4</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">continuity-definition</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">illustrated_by</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">fig-5-5</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">sec-intro</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">supplements</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">graph-examples-intro</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">graph-examples-intro</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">supplements</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">example-linear-continuity</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">example-linear-continuity</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">supplements</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">table-2x-3</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">example-linear-continuity</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">illustrated_by</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">fig-5-6</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">graph-examples-intro</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">supplements</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">example-piecewise-discontinuity</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">example-piecewise-discontinuity</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">illustrated_by</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">fig-5-7</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">continuity-definition</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">example_of</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">example-9</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">continuity-definition</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">example_of</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">example-10</span>
+    </div>
+    <div class="rel-row">
+      <span class="rel-from">example-10</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-type">exercise_for</span>
+      <span class="rel-arrow">&#8594;</span>
+      <span class="rel-to">e9</span>
+    </div></div>
+</div>
+
+</div>
+</body>
+</html>
